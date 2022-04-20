@@ -1,0 +1,33 @@
+body {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 16px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  text-align: center;
+}
+
+.byline {
+  font-weight: 200;
+  font-style: italic;
+}
+
+/* styles for past, present and future hours */
+.past_line {
+  border: 1px solid white;
+  background: lightgray;
+}
+
+.present_line {
+  background: lightblue;
+}
+
+.future_line {
+  background: yellowgreen;
+}
