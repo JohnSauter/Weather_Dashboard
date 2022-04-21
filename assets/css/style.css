@@ -1,1 +1,6 @@
 
+/* background for the image condition icom, which has
+ * lots if white if it is cloudy.  */
+#condition_image {
+    background:blue
+}

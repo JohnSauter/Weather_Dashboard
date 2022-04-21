@@ -26,7 +26,9 @@ function handle_submit(event) {
   event.preventDefault();
   const target = $(event.target);
   const target_input = target.children("input");
-  const city_name = target_input.val();
+  let city_name = target_input.val();
+  /* Remove spaces, since we will be constructing a URL with
+   * the name.  */
   remember_city_name(city_name);
   target_input.val("");
 }
@@ -120,8 +122,13 @@ function process_city_name (city_name) {
   if ("location" in city_names_data[city_name]) {
     city_obj = city_names_data[city_name].location;
 
-  /* Get the latitude and longitude from the geocoding data.
-   */
+  /* Get the latitude and longitude from the geocoding data
+   * if it exists.  */
+  if (city_obj.length == 0) {
+    alert("no such city");
+    return;
+  }
+
   const latitude = city_obj[0].lat;
   const longtitude = city_obj[0].lon;
   console.log(latitude + "," + longtitude);
@@ -150,11 +157,29 @@ function process_city_name (city_name) {
   }
 }
 
+/* Function to display the weather information about a
+ * named city.  All of the information we need is in
+ * city_names_data[city_name].  */
 function display_city_weather (city_name) {
+  const location_data = city_names_data[city_name].location;
   const weather_data = city_names_data[city_name].weather;
-  console.log(weather_data);
+  $("#display_city_name").text(location_data[0].name);
+  const the_time_t = weather_data.current.dt;
+  const the_date = moment.unix(the_time_t).format("dddd, MMMM Do YYYY, HH:mm:ss");
+  $("#display_date").text(the_date);
+  const weather_description = weather_data.current.weather[0].description;
+  const weather_icon = weather_data.current.weather[0].icon;
+  const weather_icon_URL = "https://openweathermap.org/img/wn/" +
+    weather_icon + ".png";
+  $("#display_conditions").html("<span>" + weather_description + 
+    "<span> <img id='condition_image' src='" + weather_icon_URL + "'></span></span>");
+    const temp_Kelvin = weather_data.current.temp;
+    const temp_celcius = temp_Kelvin -273.15;
+    $("#display_temperature").text(temp_celcius.toFixed(2) + "°C");
+    const humidity = weather_data.current.humidity;
+    $("#display_humidity").text(humidity + "%");
+    const wind_speed = weather_data.current.wind_speed;
+    $("#display_wind_speed").text(wind_speed + " meters per second");
+    const UV_index = weather_data.current.uvi;
+    $("#display_UV_index").text(UV_index);
 }
-/* http://api.openweathermap.org/data/2.5/weather?id=524901&appid=25a26b394979e8570d0f315b2b7e6e2d
- 
-http://api.openweathermap.org/geo/1.0/direct?q=NASHUA,NH,US&appid=25a26b394979e8570d0f315b2b7e6e2d
-*/
