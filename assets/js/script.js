@@ -1,80 +1,82 @@
-const current_date = $("#current_date");
-const scheduler_form = $("#scheduler_form");
 
-/* We fetch the current time only once, for consistency.  */
-const now = moment();
-current_date.text(now.format("dddd[.] MMMM Do"))
+const city_form = $("#city_form");
 
-/* Go through all the time blocks, coloring them to
- * indicate past, present or future using CSS classes.  */
+/* On startup, load the remembered cities from
+ * local storage, if available.  We use one object in 
+ * local storage, with properties the name of the city.  
+ * Each such property is an object, with the property 
+ * row_number, that being the row number in the form 
+ * where the city name is remembered.
+ */
+let city_names_data = {};
 
-const hour_ids = ["time_0900", "time_1000", "time_1100",
-  "time_1200", "time_1300", "time_1400", "time_1500",
-  "time_1600", "time_1700" ];
-const hour_numbers = [9, 10, 11, 12, 13, 14, 15, 16, 17];
-const this_hour = parseInt(now.format("HH"));
-
-for (let i=0;i<hour_ids.length;i++) {
-  let line_class = "past_line";
-  if (this_hour === hour_numbers[i]) {
-    line_class = "present_line";
-  } else {
-    if (this_hour < hour_numbers[i]) {
-      line_class = "future_line";
-    }
+const city_names_string = localStorage.getItem("weather_dashboard");
+if (city_names_string != null) {
+  city_names_data = JSON.parse(city_names_string);
+}
+if (city_names_data != null) {
+  for (let city_name in city_names_data) {
+    const row_number = city_name.row_number;
+    $("city_row" + row_number).textContents = city_name;
   }
-  const input_element = $("#" + hour_ids[i]);
-  input_element.addClass(line_class);
+  /* Put the samed names on the screen.  */
+  reload_city_names();
 }
 
-/* use fancy tooltips */
-$(document).tooltip();
-
-/* Submitting the form does nothing.  */
-scheduler_form.on("submit", function(event) {
+/* Function to handle a request for information about
+ * a named city.  */
+city_form.on("submit", handle_submit);
+function handle_submit(event) {
   event.preventDefault();
-})
-
-/* Clicking a Save button in the form saves the line.  */
-scheduler_form.on("click", "button", save_line);
-
-/* On startup, load the tasks from local storage,
- * if available.  We use one object in local storage,
- * with properties of the form "time_0000", where 0000 
- * is the time in 24-hour format: 0900, 1000, etc.
- * The value of each property is the text describing
- * the tasks for that hour.  A missing time means no
- * description for that hour.  */
-let schedule_data = {};
-
-const schedule_data_string = localStorage.getItem("work_day_scheduler");
-if (schedule_data_string != null) {
-  schedule_data = JSON.parse(schedule_data_string);
+  const target = $(event.target);
+  const target_input = target.children("input");
+  const city_name = target_input.val();
+  remember_city_name(city_name);
+  target_input.val("");
 }
-if (schedule_data != null) {
-  for (let row_id in schedule_data) {
-    /* The input fields have ids matching the properties
-     * in the schedule_data object.  */
-    const this_input = scheduler_form.find("#" + row_id);
-    this_input.val(schedule_data[row_id]);
+
+/* Function to add a city name to the list of remembered
+ * city names.  */
+function remember_city_name (city_name) {
+  /* Add it to the list of names if necessary.  Give it
+   * give it a date stamp that will move it to the top
+   * of the list.  */
+    const now = moment.utc();
+    const date_stamp = now.toISOString();
+    city_names_data[city_name] = {"last_used": date_stamp};
+
+    /* Save the updated list of cities in local storage.  */
+    localStorage.setItem("weather_dashboard", JSON.stringify(city_names_data));
+  
+    /* Update the displayed list of cities.  */
+    reload_city_names();
+    console.log(city_name);
+  }
+
+/* Function to load the saved city names onto the display.  */
+function reload_city_names () {
+  /* Sort the city names by least recently used, so the
+   * oldest ones disappear off the list.  */
+  const entries = Object.entries(city_names_data);
+  const sorted_entries = entries.sort(
+    function (a, b) {
+      if (a[1].last_used > b[1].last_used) return -1;
+      if (a[1].last_used < b[1].last_used) return 1;
+      return 0;
+    }
+  )
+  /* There is a line for each city name.  */
+  for (let i = 0; i < sorted_entries.length; i++) {
+    const row_id = String(i).padStart(2, "0");
+    const row_element = $("#city_row_" + row_id);
+    const city_name = sorted_entries[i][0];
+    row_element.html(city_name);
   }
 }
 
-/* Function to save the line clicked.  See above for the format
- * of local data.  */
-function save_line (event) {
-  const this_target = $(event.target);
-  /* Move up the tree to the row.  */
-  const this_row = this_target.parents("div.row");
-  /* From there move down to the input field.  */
-  const this_input = this_row.find("input");
-  /* The id of the input field is the property
-   * for the schedule_data object.  */
-  const the_hour = this_input.attr("id");
-  const the_text = this_input.val();
-  /* Replace an existing description, or add a missing description
-   * in the schedule_data object.  */
-  schedule_data[the_hour] = the_text;
-  /* Store the updated schedule_data object in local storage.  */
-  localStorage.setItem("work_day_scheduler", JSON.stringify(schedule_data));
+/* Clicking on a displayed city name searches for it.  */
+$("#city_buttons").on("click", handle_city_button);
+function handle_city_button (event) {
+  const target = $(event.target);
+  console.log(target.text());
 }
