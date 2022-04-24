@@ -26,7 +26,7 @@
 
   <main class="container-fluid">
     <section class="row">
-      <div class="col-12 col-md-6 col-lg-2">
+      <div class="col-12 col-md-6 col-lg-2"> <!-- city name search field -->
         <form id="city_form">
           <label class="form-label" for="city_name">
             Search for a City:</label>
@@ -37,6 +37,7 @@
         </form>
         <hr>
         <div id="city_buttons" class="btn-group-vertical" role="group">
+            <!-- list of previous city names, clickable -->
           <button class="btn btn-outline-info" id="city_row_00"></button>
           <button class="btn btn-outline-info" id="city_row_01"></button>
           <button class="btn btn-outline-info" id="city_row_02"></button>
@@ -47,16 +48,66 @@
           <button class="btn btn-outline-info" id="city_row_07"></button>
         </div>
       </div>
-      <div class="col-12 col-md-6 col-lg-10">
-        <div>Name: <span id="display_city_name"></span></div>
-        <div>Date: <span id="display_date"></span></div>
-        <div>Conditions: <span id="display_conditions"></span></div>
-        <div>Temperature: <span id="display_temperature"></span></div>
-        <div>Humidity: <span id="display_humidity"></span></div>
-        <div>Wind speed: <span id="display_wind_speed"></span></div>
-        <div>UV index: <span id="display_UV_index"></span></div>
-      </div>
-    </section>
+      <div class="col-12 col-md-6 col-lg-10"> <!-- conditions -->
+        <div class="card border-secondary">
+         <div class="card-body border-secondary"> <!-- current conditions -->
+            <h5 class="card-title">
+              <span id="display_city_name"></span>
+              <span id="display_date"></span>
+              <span id="display_conditions"></span>
+            </h5>
+            <p class="card-text">
+              Temp: <span id="display_temperature"></span>
+            </p> 
+            <p class="card-text">
+              Wind: <span id="display_wind_speed"></span>
+            </p>
+            <p class="card-text">
+              Humidity: <span id="display_humidity"></span>
+            </p>
+            <p>
+              UV index: <span id="display_UV_index"></span>
+            </p>
+          </div>
+        </div>
+
+        <section class="container"> <!-- 5-day forecast -->
+          <div class="row">
+            <h5> Five-day forecast</h5>
+            <div id="forecast_1" class="card col-lg-2 text-white bg-secondary">
+              <div class="card-body">
+                <h5 class="card-title">title 1</h5>
+                <p class="card-text">forecast day 1</p> 
+              </div>
+            </div> <!-- card -->
+            <div id="forecast_2" class="card col-lg-2 text-white bg-secondary"> 
+              <div class="card-body">
+                <h5 class="card-title">title 2</h5>
+                <p class="card-text">forecast day 2</p> 
+              </div>
+            </div> <!-- card -->
+            <div id="forecast_3" class="card col-lg-2 text-white bg-secondary"> 
+              <div class="card-body">
+                <h5 class="card-title">title 3</h5>
+                <p class="card-text">forecast day 3</p> 
+              </div>
+            </div> <!-- card -->
+            <div id="forecast_4" class="card col-lg-2 text-white bg-secondary"> 
+              <div class="card-body">
+                <h5 class="card-title">title 4</h5>
+                <p class="card-text">forecast day 4</p> 
+              </div>
+            </div> <!-- card -->
+            <div id="forecast_5" class="card col-lg-2 text-white bg-secondary"> 
+              <div class="card-body">
+                <h5 class="card-title">title 5</h5>
+                <p class="card-text">forecast day 5</p> 
+              </div>
+            </div> <!-- card -->
+          </div> <!-- row -->
+        </section> <!-- forecast area -->
+      </div>  
+    </section> <!-- row -->
     
   </main> <!-- container -->
   

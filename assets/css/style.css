@@ -1,6 +1,23 @@
 
 /* background for the image condition icom, which has
  * lots if white if it is cloudy.  */
-#condition_image {
+.weather_condition_icon {
     background:blue
+}
+
+/* colors for UV levels, from the EPA web site */
+.UV_low {
+    color: #80D07B
+}
+.UV_moderate {
+    color: #FEDD03
+}
+.UV_high {
+    color: #F79210
+}
+.UV_very_high {
+    color: #ED1C24
+}
+.UV_extreme {
+    color: #DB1C85
 }
