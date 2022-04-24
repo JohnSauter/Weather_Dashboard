@@ -1,13 +1,17 @@
+/* Javascript file for Weather Dashboard */
 
 const city_form = $("#city_form");
 const api_key = "25a26b394979e8570d0f315b2b7e6e2d"
 
 /* On startup, load the remembered cities from
  * local storage, if available.  We use one object in 
- * local storage, with properties the name of the city.  
- * Each such property is an object, with the property 
+ * local storage, whose properties are the names of the cities.  
+ * Each such property is itself an object, with the property 
  * row_number, that being the row number in the form 
- * where the city name is remembered.
+ * where the city name is remembered, location, which
+ * remembers the city's location (cities don't move) and
+ * weather, which is the last weather information we got
+ * from this city.
  */
 let city_names_data = {};
 
@@ -88,7 +92,7 @@ function handle_city_button (event) {
  * This is an asynchronous function, so it will return
  * before completing the update to the city_names_data object.  */
 async function add_location (city_name) {
-  const URL_start = "http://api.openweathermap.org/geo/1.0/direct?q=";
+  const URL_start = "https://api.openweathermap.org/geo/1.0/direct?q=";
   const URL_end = "&appid=";
 
   /* Construct the URL.  */
@@ -140,7 +144,7 @@ function process_city_name (city_name) {
   /* Now call the openweathermap server with the latitude
    * and longitude of the location for which we want
    * the weather.  */
-  const URL_start = "http://api.openweathermap.org/data/2.5/onecall";
+  const URL_start = "https://api.openweathermap.org/data/2.5/onecall";
   const the_URL = URL_start + "?lat=" + encodeURIComponent(latitude) + 
     "&lon=" + encodeURIComponent(longtitude) + "&appid=" + 
       encodeURIComponent(api_key);

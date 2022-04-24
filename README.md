@@ -13,6 +13,9 @@ bring it to the top of the list.
 The application is at github at this URL:
 https://github.com/JohnSauter/UNH_bootcamp-06-Weather_Dashboard
 
+and can be seen at this URL:
+https://johnsauter.github.io/UNH_bootcamp-06-Weather_Dashboard/
+
 Here is a screen shot showing the weather in Atlanta, GA:
 
 ![screen shot of Weather Dashboard](./assets/images/Weather_Dashboard.png)
