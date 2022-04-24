@@ -100,7 +100,6 @@ async function add_location (city_name) {
     encodeURIComponent(api_key);
 
   /* Fetch the location of the city.  */
-  console.log(the_URL);
   const response = await fetch(the_URL);
   const json = await response.json();
   const city_obj = json;
@@ -137,13 +136,11 @@ function process_city_name (city_name) {
     return;
   }
 
-  const latitude = city_obj[0].lat;
-  const longtitude = city_obj[0].lon;
-  console.log(latitude + "," + longtitude);
-
   /* Now call the openweathermap server with the latitude
    * and longitude of the location for which we want
    * the weather.  */
+  const latitude = city_obj[0].lat;
+  const longtitude = city_obj[0].lon;
   const URL_start = "https://api.openweathermap.org/data/2.5/onecall";
   const the_URL = URL_start + "?lat=" + encodeURIComponent(latitude) + 
     "&lon=" + encodeURIComponent(longtitude) + "&appid=" + 
@@ -252,11 +249,11 @@ function daily_forecast (weather_data, day_no) {
   const temp_celsius_max = temp_Kelvin_max - 273.15;
   const temp_farenheit_min = (temp_celsius_min * (9/5)) + 32.0;
   const temp_farenheit_max = (temp_celsius_max * (9/5)) + 32.0;
-  forecast_body = forecast_body + "<p>Temp: " + temp_farenheit_min.toFixed(2) +
-    "&ndash;" + temp_farenheit_max.toFixed(2) + " °F</p>";
+  forecast_body = forecast_body + "<p>Temp: " + temp_farenheit_min.toFixed(0) +
+    "&ndash;" + temp_farenheit_max.toFixed(0) + " °F</p>";
   const wind_speed = this_forecast.wind_speed;
   const wind_speed_mph = wind_speed * 2.236936292054402;
-  forecast_body = forecast_body + "<p>Wind: " + wind_speed_mph.toFixed(2) + 
+  forecast_body = forecast_body + "<p>Wind: " + wind_speed_mph.toFixed(0) + 
     " MPH</p>";
   const humidity = this_forecast.humidity;
   forecast_body = forecast_body + "<p>Humidity: " + humidity + "%</p>";
