@@ -1,4 +1,4 @@
-# UNH_bootcamp-06-Weather_Dashboard
+# Weather_Dashboard
 Display the weather at a specified location
 
 Type a place name in the box below "Search for a City"
